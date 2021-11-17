@@ -20,9 +20,9 @@ class ScoreRepository @Inject constructor(private val service: ScoreService,priv
             emit(Result.Loading())
             val response = service.getScore().toDomain()
             emit(Result.Success(response))
-        }.catch {
+        }.catch { e->
 
-            emit(Result.Error("Fetching Score Failed"))
+            emit(Result.Error("Fetching Score Failed : + ${e.message}"))
         }.flowOn(dispatcher)
     }
 }

@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.ScoreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <View
+        android:id="@+id/parent_circle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/rounded_circle"
+        />
+    <app.futured.donut.DonutProgressView
+        android:id="@+id/score_donut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:donut_gapWidth="0"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="@id/parent_circle"
+        app:layout_constraintEnd_toEndOf="@id/parent_circle"
+        app:layout_constraintTop_toTopOf="@id/parent_circle"
+        app:layout_constraintBottom_toBottomOf="@id/parent_circle"
+        app:donut_strokeCap="butt"
+        app:donut_strokeWidth="5dp"
+        app:donut_bgLineColor="#FFC107"
+         />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/score_donut"
+        app:layout_constraintEnd_toEndOf="@id/score_donut"
+        app:layout_constraintStart_toStartOf="@id/score_donut"
+        app:layout_constraintTop_toTopOf="@id/score_donut">
+
+        <TextView
+            android:id="@+id/score_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-thin"
+            android:text="@string/your_credit_score_is"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/score_valuet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="327"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="#FFEB3B"
+        android:textSize="75sp"/>
+
+    <TextView
+        android:id="@+id/max_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:drawablePadding="8dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-thin"
+        android:textStyle="bold"
+        tools:text="out of 700"
+        android:textSize="24sp"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
