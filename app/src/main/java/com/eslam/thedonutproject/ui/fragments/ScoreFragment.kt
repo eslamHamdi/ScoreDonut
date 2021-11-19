@@ -3,36 +3,33 @@ package com.eslam.thedonutproject.ui.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import app.futured.donut.DonutSection
-import com.eslam.thedonutproject.R
 import com.eslam.thedonutproject.databinding.FragmentScoreBinding
 import com.eslam.thedonutproject.domain.model.ScoreModel
 import com.eslam.thedonutproject.ui.viewmodels.MainViewModel
-import com.eslam.thedonutproject.utils.wrapEspressoIdlingResource
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ScoreFragment : Fragment() {
 
-     lateinit var binding:FragmentScoreBinding
+    lateinit var binding: FragmentScoreBinding
 
-     val viewModel:MainViewModel by activityViewModels()
+    val viewModel: MainViewModel by activityViewModels()
     private var model: ScoreModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentScoreBinding.inflate(inflater)
         return binding.root
@@ -44,10 +41,11 @@ class ScoreFragment : Fragment() {
         //handling live data in xml if added
         binding.lifecycleOwner = viewLifecycleOwner
 
+        // fired at viewModel init Block to avoid unnecessary network calls during navigation or config changes
         //fetchScore()
 
-            observeScore()
-            observeError()
+        observeScore()
+        observeError()
 
 
 
@@ -57,18 +55,17 @@ class ScoreFragment : Fragment() {
     }
 
     private fun observeError() {
-        viewModel.errorevent.observe(viewLifecycleOwner){
+        viewModel.errorevent.observe(viewLifecycleOwner) {
 
-            Toast.makeText(this.requireContext(),"$it",Toast.LENGTH_LONG).show()
+            Toast.makeText(this.requireContext(), "$it", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun observeScore() {
-        viewModel.scoreLiveData.observe(viewLifecycleOwner){
-            Log.e(null, "observeScore: $it ", )
+        viewModel.scoreLiveData.observe(viewLifecycleOwner) {
+            Log.e(null, "observeScore: $it ")
 
-            if (it != null)
-            {
+            if (it != null) {
                 model = it
                 val section1 = DonutSection(
                     name = "section_1",
@@ -83,7 +80,7 @@ class ScoreFragment : Fragment() {
 
                 )
 
-                binding.scoreDonut.cap= it.maxScoreValue?.toFloat() ?: 700f
+                binding.scoreDonut.cap = it.maxScoreValue?.toFloat() ?: 700f
 
                 binding.scoreValue.text = it.score.toString()
                 val maxScore = "out of ${it.maxScoreValue}"
@@ -96,14 +93,17 @@ class ScoreFragment : Fragment() {
 
     //a way to refresh the data by a pull to refresh or a button , etc
     private fun fetchScore() {
-       lifecycleScope.launch {
-           viewModel.getTheScore()
-       }
+        lifecycleScope.launch {
+            viewModel.getTheScore()
+        }
     }
 
-    private fun navigateToDetailsScreen()
-    {
-        findNavController().navigate(ScoreFragmentDirections.actionScoreFragmentToDetailsFragment(model))
+    private fun navigateToDetailsScreen() {
+        findNavController().navigate(
+            ScoreFragmentDirections.actionScoreFragmentToDetailsFragment(
+                model
+            )
+        )
     }
 
 
