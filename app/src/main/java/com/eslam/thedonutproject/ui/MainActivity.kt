@@ -10,8 +10,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.eslam.thedonutproject.R
 import com.eslam.thedonutproject.databinding.ActivityMainBinding
 import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
-@EntryPoint
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding

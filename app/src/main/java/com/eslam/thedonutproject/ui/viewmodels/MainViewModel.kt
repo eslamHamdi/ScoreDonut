@@ -1,5 +1,6 @@
 package com.eslam.thedonutproject.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.eslam.thedonutproject.data.remote.Result
 import com.eslam.thedonutproject.domain.DataSource
 import com.eslam.thedonutproject.domain.model.ScoreModel
 import com.eslam.thedonutproject.utils.SingleLiveEvent
+import com.eslam.thedonutproject.utils.wrapEspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,8 +29,12 @@ class MainViewModel @Inject constructor(private val repository: DataSource): Vie
     get() = _errorEvent
 
 
+    //handles loading like progress bar if implemented in the future as its a common and integral view for this scenario
     var loadingState:MutableLiveData<Boolean> = MutableLiveData(false)
 
+    init {
+        getTheScore()
+    }
 
 
 
@@ -38,9 +44,10 @@ class MainViewModel @Inject constructor(private val repository: DataSource): Vie
     {
         viewModelScope.launch {
 
+            Log.e("MainViewModel", "getTheScore: launched ", )
             repository.getRemoteData().collect {
 
-                when(it)
+                    when(it)
                 {
                     is Result.Success ->{
                         _scoreLiveData.value =it.data
@@ -54,6 +61,7 @@ class MainViewModel @Inject constructor(private val repository: DataSource): Vie
                         loadingState.value = true
                     }
                 }
+
 
 
             }

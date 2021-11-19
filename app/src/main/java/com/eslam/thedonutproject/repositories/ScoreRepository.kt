@@ -5,6 +5,7 @@ import com.eslam.thedonutproject.data.remote.ScoreService
 import com.eslam.thedonutproject.domain.DataSource
 import com.eslam.thedonutproject.domain.model.ScoreModel
 import com.eslam.thedonutproject.utils.toDomain
+import com.eslam.thedonutproject.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,13 +17,19 @@ class ScoreRepository @Inject constructor(private val service: ScoreService,priv
     DataSource
 {
     override suspend fun getRemoteData(): Flow<Result<ScoreModel>> {
-        return flow {
-            emit(Result.Loading())
-            val response = service.getScore().toDomain()
-            emit(Result.Success(response))
-        }.catch { e->
+        return wrapEspressoIdlingResource {
+            flow {
+                emit(Result.Loading())
 
-            emit(Result.Error("Fetching Score Failed : + ${e.message}"))
-        }.flowOn(dispatcher)
-    }
+                val response = service.getScore().toDomain()
+
+                emit(Result.Success(response))
+            }.catch { e->
+
+                emit(Result.Error("Fetching Score Failed : ${e.message}"))
+            }.flowOn(dispatcher)
+        }
+
+
+        }
 }
